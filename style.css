@@ -15,7 +15,7 @@ h1, h2 {
   text-align: center;
 }
 
-.input-section {
+.input-section, .filter-section {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
@@ -24,12 +24,13 @@ h1, h2 {
   padding: 20px;
 }
 
-.input-section label {
+.input-section label, .filter-section label {
   font-weight: bold;
 }
 
 .input-section input,
-.input-section select {
+.input-section select,
+.filter-section select {
   padding: 5px;
 }
 

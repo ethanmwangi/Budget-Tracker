@@ -9,6 +9,7 @@ const expensesTableBody = document.getElementById('expenses-table-body');
 const totalAmountCell = document.getElementById('total-amount');
 const chartCanvas = document.getElementById('chart');
 const darkToggle = document.getElementById('dark-toggle');
+const filterSelect = document.getElementById('filter-select');
 
 let chart;
 
@@ -36,9 +37,9 @@ function renderChart() {
   });
 }
 
-function updateTotal() {
-  totalAmount = expenses.reduce((sum, exp) => sum + exp.amount, 0);
-  totalAmountCell.textContent = `KES ${totalAmount.toFixed(2)}`;
+function updateTotal(filtered = expenses) {
+  const sum = filtered.reduce((total, exp) => total + exp.amount, 0);
+  totalAmountCell.textContent = `KES ${sum.toFixed(2)}`;
 }
 
 function saveToCookies() {
@@ -49,10 +50,16 @@ function loadFromCookies() {
   const cookie = document.cookie.split('; ').find(row => row.startsWith('expenses='));
   if (cookie) {
     expenses = JSON.parse(cookie.split('=')[1]);
-    expenses.forEach(addExpenseRow);
-    updateTotal();
+    renderTable();
     renderChart();
   }
+}
+
+function renderTable(filter = "All") {
+  expensesTableBody.innerHTML = '';
+  const filtered = filter === "All" ? expenses : expenses.filter(e => e.category === filter);
+  filtered.forEach(addExpenseRow);
+  updateTotal(filtered);
 }
 
 function addExpenseRow(expense) {
@@ -67,9 +74,8 @@ function addExpenseRow(expense) {
   deleteBtn.classList.add('delete-btn');
   deleteBtn.addEventListener('click', () => {
     expenses = expenses.filter(e => e !== expense);
-    expensesTableBody.removeChild(newRow);
-    updateTotal();
     saveToCookies();
+    renderTable(filterSelect.value);
     renderChart();
   });
   deleteCell.appendChild(deleteBtn);
@@ -87,13 +93,16 @@ addBtn.addEventListener('click', () => {
 
   const expense = { category, amount, date };
   expenses.push(expense);
-  addExpenseRow(expense);
-  updateTotal();
   saveToCookies();
+  renderTable(filterSelect.value);
   renderChart();
 
   amountInput.value = '';
   dateInput.value = '';
+});
+
+filterSelect.addEventListener('change', () => {
+  renderTable(filterSelect.value);
 });
 
 darkToggle.addEventListener('change', () => {

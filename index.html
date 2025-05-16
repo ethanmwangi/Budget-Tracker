@@ -10,7 +10,7 @@
 </head>
 <body>
   <h1>Budget Tracker</h1>
-  
+
   <label class="toggle-container">
     🌞
     <input type="checkbox" id="dark-toggle" />
@@ -33,6 +33,17 @@
     <input type="date" id="date-input" />
 
     <button id="add-btn">Add</button>
+  </div>
+
+  <div class="filter-section">
+    <label for="filter-select">Filter by Category</label>
+    <select id="filter-select">
+      <option value="All">All</option>
+      <option value="Food & Beverages">Food & Beverages</option>
+      <option value="Rent">Rent</option>
+      <option value="Savings">Savings</option>
+      <option value="Utilities">Utilities</option>
+    </select>
   </div>
 
   <div class="expense-list">
